@@ -56,7 +56,7 @@ while True:
         #boing.play()
     if Ball2.y+Ball2.radius>600:
             Ball2.y=600-Ball2.radius
-            Ball2.vy=-u*0.9
+            Ball2.vy=-u1*0.9
             #boing.play()
         
     Ball.position=(Ball.x,Ball.y)
