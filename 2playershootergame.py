@@ -4,26 +4,26 @@ screen=pygame.display.set_mode((1000,700))
 background=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\background.png")
 screen.blit(background,(0,0))
 bulletredcreated=False
+bulletyelcreated=False
 spaceshipred=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\rocketred.png")
 spaceshipyellow=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\rocketyellow.png")
 bulletred=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\bulletred.jpg")
+bulletyellow=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\bulletyellow.jpg")
 spaceshipwidth=51
 spaceshipheight=62
 redrect=pygame.Rect(850,350,spaceshipwidth,spaceshipheight)
-class rocket:
-    def __init__(self):
-        # self.x=850
-        # self.y=350
-        
+yelrect=pygame.Rect(100,350,spaceshipwidth,spaceshipheight)
+bulredrect=pygame.Rect(0,0,26,8)
+bulyelrect=pygame.Rect(0,0,26,8)
 
-        self.x1=100
-        self.y1=350
+class rocket:
+    
     def drawred(self):
         screen.blit(spaceshipred,(redrect.x,redrect.y))
-        pygame.display.update()
+        #pygame.display.update()
     def drawyel(self):
-        screen.blit(spaceshipyellow,(self.x1,self.y1))
-        pygame.display.update()
+        screen.blit(spaceshipyellow,(yelrect.x,yelrect.y))
+        #pygame.display.update()
    
 class bullet:
     def __init__(self):
@@ -48,23 +48,23 @@ def movered(keysred):
     if keysred[0]==True and redrect.y>0:
             redrect.y-=1
             
-    if keysred[1]==True and red.y<650:
-            red.y+=1
-    if keysred[2]==True and red.x>490:
-            red.x-=1
-    if keysred[3]==True and red.x<950:
-            red.x+=1
+    if keysred[1]==True and redrect.y<650:
+            redrect.y+=1
+    if keysred[2]==True and redrect.x>495:
+            redrect.x-=1
+    if keysred[3]==True and redrect.x<950:
+            redrect.x+=1
 
 def moveyellow(keysyellow):
-    if keysyellow[pygame.K_w]==True and yellow.y1>0:
-            yellow.y1-=1
+    if keysyellow[pygame.K_w]==True and yelrect.y>0:
+            yelrect.y-=1
             
-    if keysyellow[pygame.K_s]==True and yellow.y1<650:
-            yellow.y1+=1
-    if keysyellow[pygame.K_a]==True and yellow.x1>0:
-            yellow.x1-=1
-    if keysyellow[pygame.K_d]==True and yellow.x1<480:
-            yellow.x1+=1
+    if keysyellow[pygame.K_s]==True and yelrect.y<650:
+            yelrect.y+=1
+    if keysyellow[pygame.K_a]==True and yelrect.x>0:
+            yelrect.x-=1
+    if keysyellow[pygame.K_d]==True and yelrect.x<429:
+            yelrect.x+=1
 
 
 health=10
@@ -82,31 +82,49 @@ keysyellow=[False,False,False,False]
 
 
 while True:
+    screen.blit(background,(0,0))
     text=font.render("Health:{}".format(health),True,"dark blue")
     text1=font.render("Health:{}".format(health1),True,"dark blue")
     pygame.draw.rect(screen,"white",(480,0,12,700))
     screen.blit(text,(180,100))
-    screen.blit(bulletred,(red.x,red.y))
+    screen.blit(bulletred,(bulredrect.x,bulredrect.y))
+    screen.blit(bulletyellow,(bulyelrect.x,bulyelrect.y))
     screen.blit(text,(700,100))
-    screen.blit(spaceshipred,(red.x,red.y))
-    screen.blit(spaceshipyellow,(yellow.x1,yellow.y1))
-    pygame.display.update()
+    
+    
     red.drawred()
-    pygame.display.update()
-    screen.blit(background,(0,0))
+    yellow.drawyel()
+    
+   
 
     movered(keysred)
     
     keypress=pygame.key.get_pressed()
     moveyellow(keypress)
+    if bulletyelcreated==True:
+         bulyelrect.x+=15
+         if bulyelrect.x>1045:
+              bulletyelcreated=False
     if bulletredcreated==True:
-         bulletred.y-=15
+         bulredrect.x-=15
+         if bulredrect.x<-30:
+            bulletredcreated=False
+    
     for i in pygame.event.get():
         if i.type==pygame.QUIT:
             pygame.quit()
         if i.type==pygame.KEYDOWN:
-            if i.key==pygame.K_RSHIFT:
-                bulletredcreated=True
+            if i.key==pygame.K_CAPSLOCK:
+                 if bulletyelcreated==False:
+                      bulletyelcreated=True
+                      bulyelrect.x=yelrect.x
+                      bulyelrect.y=yelrect.y
+            if i.key==pygame.K_RCTRL:
+                if bulletredcreated==False:
+                    bulletredcreated=True
+                    bulredrect.x=redrect.x
+                    bulredrect.y=redrect.y
+
             
             if i.key==pygame.K_UP:
                 keysred[0]=True
@@ -133,7 +151,7 @@ while True:
 
             elif i.key==pygame.K_RIGHT:
                 keysred[3]=False
-            
+    pygame.display.update()
                
                 
             
