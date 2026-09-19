@@ -67,9 +67,10 @@ def moveyellow(keysyellow):
             yelrect.x+=1
 
 
-healthyel=10
-healthred=10
+healthyel=5
+healthred=5
 font=pygame.font.SysFont("Times New Roman",30)
+font1=pygame.font.SysFont("Times New Roman",15)
 
 
 
@@ -81,16 +82,28 @@ keysyellow=[False,False,False,False]
 
 
 
-while True:
+while healthyel>-1 and healthred>-1:
     screen.blit(background,(0,0))
     text=font.render("Health:{}".format(healthyel),True,"dark blue")
     text1=font.render("Health:{}".format(healthred),True,"dark blue")
+    end=font1.render("before you play again, the winner gets one last shot at hitting the enemy!",True,"purple")
     
     pygame.draw.rect(screen,"white",(480,0,12,700))
     screen.blit(text,(180,100))
-    screen.blit(bulletred,(bulredrect.x,bulredrect.y))
-    screen.blit(bulletyellow,(bulyelrect.x,bulyelrect.y))
-    screen.blit(text,(700,100))
+    if bulletredcreated==True:
+        screen.blit(bulletred,(bulredrect.x,bulredrect.y))
+    if bulletyelcreated==True:
+        screen.blit(bulletyellow,(bulyelrect.x,bulyelrect.y))
+    screen.blit(text1,(700,100))
+
+    if healthyel==0:
+        redwin=font.render("RED WINS",True,"red")
+        screen.blit(redwin,(422,250))
+        screen.blit(end,(250,300))
+    if healthred==0:
+        yelwin=font.render("YELLOW WINS",True,"yellow")
+        screen.blit(yelwin,(200,250))
+        screen.blit(end,(250,300))
     
     
     red.drawred()
@@ -103,10 +116,11 @@ while True:
     keypress=pygame.key.get_pressed()
     moveyellow(keypress)
     if bulletyelcreated==True:
-        print("createdyel")
+       
         if bulyelrect.colliderect(redrect):
-            print("collideyel")
+          
             healthred-=1
+            bulletyelcreated=False
 
 
         bulyelrect.x+=15
@@ -117,6 +131,7 @@ while True:
         if bulredrect.colliderect(yelrect):
              print("collidered")
              healthyel-=1
+             bulletredcreated=False
 
         bulredrect.x-=15
         if bulredrect.x<-30:
@@ -126,7 +141,7 @@ while True:
         if i.type==pygame.QUIT:
             pygame.quit()
         if i.type==pygame.KEYDOWN:
-            if i.key==pygame.K_CAPSLOCK:
+            if i.key==pygame.K_f:
                  if bulletyelcreated==False:
                       bulletyelcreated=True
                       bulyelrect.x=yelrect.x
