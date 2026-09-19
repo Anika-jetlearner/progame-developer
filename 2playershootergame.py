@@ -1,14 +1,14 @@
 import pygame
 pygame.init()
 screen=pygame.display.set_mode((1000,700))
-background=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\background.png")
+background=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\background.png")
 screen.blit(background,(0,0))
 bulletredcreated=False
 bulletyelcreated=False
-spaceshipred=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\rocketred.png")
-spaceshipyellow=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\rocketyellow.png")
-bulletred=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\bulletred.jpg")
-bulletyellow=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\bulletyellow.jpg")
+spaceshipred=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\rocketred.png")
+spaceshipyellow=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\rocketyellow.png")
+bulletred=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\bulletred.jpg")
+bulletyellow=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\bulletyellow.jpg")
 spaceshipwidth=51
 spaceshipheight=62
 redrect=pygame.Rect(850,350,spaceshipwidth,spaceshipheight)
@@ -67,8 +67,8 @@ def moveyellow(keysyellow):
             yelrect.x+=1
 
 
-health=10
-health1=10
+healthyel=10
+healthred=10
 font=pygame.font.SysFont("Times New Roman",30)
 
 
@@ -83,8 +83,9 @@ keysyellow=[False,False,False,False]
 
 while True:
     screen.blit(background,(0,0))
-    text=font.render("Health:{}".format(health),True,"dark blue")
-    text1=font.render("Health:{}".format(health1),True,"dark blue")
+    text=font.render("Health:{}".format(healthyel),True,"dark blue")
+    text1=font.render("Health:{}".format(healthred),True,"dark blue")
+    
     pygame.draw.rect(screen,"white",(480,0,12,700))
     screen.blit(text,(180,100))
     screen.blit(bulletred,(bulredrect.x,bulredrect.y))
@@ -102,12 +103,23 @@ while True:
     keypress=pygame.key.get_pressed()
     moveyellow(keypress)
     if bulletyelcreated==True:
-         bulyelrect.x+=15
-         if bulyelrect.x>1045:
-              bulletyelcreated=False
+        print("createdyel")
+        if bulyelrect.colliderect(redrect):
+            print("collideyel")
+            healthred-=1
+
+
+        bulyelrect.x+=15
+        if bulyelrect.x>1045:
+            bulletyelcreated=False
+
     if bulletredcreated==True:
-         bulredrect.x-=15
-         if bulredrect.x<-30:
+        if bulredrect.colliderect(yelrect):
+             print("collidered")
+             healthyel-=1
+
+        bulredrect.x-=15
+        if bulredrect.x<-30:
             bulletredcreated=False
     
     for i in pygame.event.get():
