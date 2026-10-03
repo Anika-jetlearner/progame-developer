@@ -24,12 +24,12 @@ class Bee(pygame.sprite.Sprite):
 
 class Cat(pygame.sprite.Sprite):
     def __init__(self):
-        super().__init__
+        super().__init__()
         self.image=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\catstanding.png")
         self.rect=self.image.get_rect()
         self.rect.x=random.randint(0,600)
         self.rect.y=random.randint(0,600)
-        
+    
 
 
 
@@ -37,6 +37,10 @@ class Cat(pygame.sprite.Sprite):
 bees=pygame.sprite.Group()
 bee=Bee()
 bees.add(bee)
+cats=pygame.sprite.Group()
+cat=Cat()
+cats.add(cat)
+
 
 keys=[False,False,False,False]
 
@@ -44,6 +48,7 @@ while True:
     clock.tick(80)
     screen.fill("light blue")
     bees.update()
+  
     for i in pygame.event.get():
         if i.type==pygame.QUIT:
             pygame.quit()
@@ -68,6 +73,7 @@ while True:
 
 
     bees.draw(screen)
+    cats.draw(screen)
     pygame.display.update()
 
 

@@ -6,7 +6,10 @@ screen=pygame.display.set_mode((600,500))
 background=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\background.png")
 screen.blit(background,(0,0))
 #bee=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\bee.png")
-
+score=0
+Time=30
+game_over=False
+font=pygame.font.SysFont("Times New Roman",30)
 pygame.display.update()
 
 class Bee:
@@ -23,13 +26,13 @@ class Bee:
         
     def move(self):
         if keys[0]==True and self.beerect.y>0:
-            self.beerect.y-=1
+            self.beerect.y-=2
         if keys[1]==True and self.beerect.y<450:
-            self.beerect.y+=1
+            self.beerect.y+=2
         if keys[2]==True and self.beerect.x>0:
-            self.beerect.x-=1
+            self.beerect.x-=2
         if keys[3]==True and self.beerect.x<550:
-            self.beerect.x+=1
+            self.beerect.x+=2
         pygame.time.wait(10)
 
 class Flower:
@@ -43,7 +46,8 @@ class Flower:
         screen.blit(self.imgf,(self.x,self.y))
     def draw(self):
         screen.blit(self.imgf,(self.florect.x,self.florect.y))
-        
+
+
 
 keys=[False,False,False,False]
 
@@ -51,15 +55,25 @@ keys=[False,False,False,False]
 
 bee=Bee()
 flo=Flower()
+start_time=pygame.time.get_ticks()
 while True:
     screen.blit(background,(0,0))
+    text=font.render("Score {}".format(score),True,"black") 
+    text1=font.render("Times up! Score = {}".format(score),True,"black")
     bee.draw()
     #flo.draw()
     bee.move()
     
     flo.draw()
+    screen.blit(text,(10,10))
+    if pygame.time.get_ticks()-start_time>30000:
+        screen.fill("yellow")
+        screen.blit(text1,(200,200))
+        pygame.display.update()
+        pygame.time.wait(2000)
+        break
     if bee.beerect.colliderect(flo.florect):
-        print("collision")
+        score+=1
         flo.florect.x=random.randint(0,600)
         flo.florect.y=random.randint(0,500)
         flo.draw()
@@ -84,6 +98,8 @@ while True:
                 keys[2]=False
             elif i.key==pygame.K_RIGHT:
                 keys[3]=False
+
+
     pygame.display.update()
 
         
