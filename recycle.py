@@ -20,13 +20,13 @@ class Bin(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
     def move(self):
         if keys[0]==True:
-            self.rect.y-=2
+            self.rect.y-=3
         if keys[1]==True: 
-            self.rect.y+=2
+            self.rect.y+=3
         if keys[2]==True:
-            self.rect.x-=2
+            self.rect.x-=3
         if keys[3]==True:
-            self.rect.x+=2
+            self.rect.x+=3
         pygame.time.wait(10)
 
 recycleimgs=[r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\paper bag.png",r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\wooden box.png",r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\pencil.png"]
@@ -79,10 +79,14 @@ font=pygame.font.SysFont("Times New Roman",30)
 
 
 starttime=time.time()
+timeleft=30
 
 while True:
+    
     clock.tick(30)
-    text1=font.render("time left {}".format(timer),True,"black")
+    text1=font.render("time left {}".format(timeleft),True,"black")
+    text2=font.render("YOU WIN!".format(timeleft),True,"black")
+    text3=font.render("YOU NEED TO LEARN HOW TO RECYCLE ".format(timeleft),True,"black")
     text=font.render("score {}".format(score),True,"black")
     bin.move()
     screen.blit(bg,(0,0))
@@ -90,6 +94,16 @@ while True:
     screen.blit(text1,(50,50))
     colrecy=pygame.sprite.spritecollide(bin,recycle,True)
     colnonrecy=pygame.sprite.spritecollide(bin,nonrecycle,True)
+    if timeleft<0:
+        if score>24:
+            screen.blit(text2,(350,250))
+        else:
+            screen.blit(text3,(150,250))
+        pygame.time.wait(2000)
+        break
+
+
+
     for i in colrecy:
         score+=1
         print(score)
@@ -120,5 +134,5 @@ while True:
     sprites.draw(screen)
     currenttime=time.time()
     elapsedtime=currenttime-starttime
-    timer=timer-int(elapsedtime)
+    timeleft=timer-int(elapsedtime)
     pygame.display.update()
