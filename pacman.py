@@ -21,6 +21,9 @@ class Pacman(pygame.sprite.Sprite):
             self.rect.x+=2
         pygame.time.wait(10)
 
+    def draw(self):
+        screen.blit(self.image,(self.rect.x,self.rect.y))
+
 class Coin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -34,7 +37,7 @@ class Coin(pygame.sprite.Sprite):
 
 sprites=pygame.sprite.Group()
 pacman=Pacman()
-sprites.add(pacman)
+#sprites.add(pacman)
 
 for xi in range(36):
     for yi in range(31):
@@ -49,6 +52,10 @@ while True:
     
     pacman.move()
     screen.blit(bg,(0,0))
+    pacman.draw()
+    for i in sprites:
+        if pacman.rect.colliderect(i.rect):
+            sprites.remove(i)
     for i in pygame.event.get():
         if i.type==pygame.QUIT:
             pygame.quit()
