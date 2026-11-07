@@ -24,9 +24,9 @@ class Bird(pygame.sprite.Sprite):
     def updatebird(self):
        
         self.starttime+=1
-        if self.starttime>5:
+        if self.starttime<10:
             self.image=fup
-        elif self.starttime>10:
+        elif self.starttime<15:
             self.image=fdown
             self.starttime=0
         else:
@@ -49,10 +49,11 @@ x=0
 
 
 
-
+clock=pygame.time.Clock()
 
 
 while True:
+    clock.tick(60)
     screen.blit(bg,(0,0))
     screen.blit(ground,(x,450))
     flappy.updatebird()
