@@ -52,23 +52,28 @@ class Pipe(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         if flip==True:
             self.image=pygame.transform.flip(self.image,False,True)
-            self.rect.x=650
-            self.rect.y=0
+            self.rect.x=600
+            self.rect.y=-100
         else:
-            self.rect.x=650
+            self.rect.x=600
             self.rect.y=250
+    def update(self):
+        self.rect.x-=1
+        if self.rect.right<0:
+            self.kill()
              
 
-pipe=Pipe(True)
+
 flappy=Bird()
 sprites=pygame.sprite.Group()
+pipes=pygame.sprite.Group()
 sprites.add(flappy)
 
 flappy.rect.x=50
 flappy.rect.y=250
 
 
-    
+timeinterval=2000   
 x=0
 
 
@@ -76,13 +81,23 @@ x=0
 
 clock=pygame.time.Clock()
 
+pipespritecreate=pygame.time.get_ticks()
 
 while True:
-    #clock.tick(60)
+    currenttime=pygame.time.get_ticks()
+    if currenttime-pipespritecreate>2000:
+
+        pipebottom=Pipe(False)
+        pipetop=Pipe(True)
+        pipes.add(pipebottom)
+        pipes.add(pipetop)
+        pipespritecreate=currenttime
+
     screen.blit(bg,(0,0))
+    pipes.draw(screen)
     screen.blit(ground,(x,450))
-    screen.blit(pipe.image)
     flappy.updatebird()
+    pipes.update()
 
     x-=1
     if x<-200:
@@ -100,4 +115,5 @@ while True:
                 spacepressed=False
 
     sprites.draw(screen)
+    
     pygame.display.update()
