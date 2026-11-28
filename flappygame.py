@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 pygame.init()
 
 bg=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\bagr.png")
@@ -10,6 +11,7 @@ fdown=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper c
 ground=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\groundbg.png")
 pipe=pygame.image.load(r"C:\Users\Anika\OneDrive\Desktop\Python gamedeveloper course\Progame developer\images\pipe.png")
 screen=pygame.display.set_mode((650,600))
+game_over=False
 
 spacepressed=False
 gamestarted=False
@@ -25,42 +27,44 @@ class Bird(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
 
     def updatebird(self):
-        
-        self.starttime+=1
-        if self.starttime<10:
-            self.image=fup
-        elif self.starttime<15:
-            self.image=fdown
+        if game_over==False:
+            self.starttime+=1
+            if self.starttime<10:
+                self.image=fup
+            elif self.starttime<15:
+                self.image=fdown
 
-        elif self.starttime<20:
-            self.image=fstill
-           
+            elif self.starttime<20:
+                self.image=fstill
+                
+            else:
+                self.starttime=0
+            if spacepressed==True and gamestarted==True:
+                
+                self.rect.y-=6
+            if gamestarted==True:
+                self.rect.y+=0.5
         else:
-            self.starttime=0
-        if spacepressed==True and gamestarted==True:
-           
-            self.rect.y-=3
-        if gamestarted==True:
-            self.rect.y+=0.5
-
-        print(self.starttime)
+            self.rect.y+=1
+            if self.rect.y==600:
+                self.kill()
 
 class Pipe(pygame.sprite.Sprite):
     def __init__(self,flip):
         super().__init__()
         self.image=pipe
         self.rect=self.image.get_rect()
+
         if flip==True:
             self.image=pygame.transform.flip(self.image,False,True)
-            self.rect.x=600
-            self.rect.y=-100
+            self.rect.bottomleft=(600,random.randint(100,250))
         else:
-            self.rect.x=600
-            self.rect.y=250
+            self.rect.topleft=(600,random.randint(300,400))
     def update(self):
-        self.rect.x-=1
-        if self.rect.right<0:
-            self.kill()
+        if game_over==False:
+            self.rect.x-=1
+            if self.rect.right<0:
+                self.kill()
              
 
 
@@ -85,13 +89,15 @@ pipespritecreate=pygame.time.get_ticks()
 
 while True:
     currenttime=pygame.time.get_ticks()
-    if currenttime-pipespritecreate>2000:
+    if game_over==False:
+        if currenttime-pipespritecreate>2000:
 
-        pipebottom=Pipe(False)
-        pipetop=Pipe(True)
-        pipes.add(pipebottom)
-        pipes.add(pipetop)
-        pipespritecreate=currenttime
+            pipebottom=Pipe(False)
+            pipetop=Pipe(True)
+            pipes.add(pipebottom)
+            pipes.add(pipetop)
+            pipespritecreate=currenttime
+    
 
     screen.blit(bg,(0,0))
     pipes.draw(screen)
@@ -99,9 +105,16 @@ while True:
     flappy.updatebird()
     pipes.update()
 
-    x-=1
-    if x<-200:
-        x=0
+    if pygame.sprite.groupcollide(sprites,pipes,False,True):
+        game_over=True
+        flappy.image=pygame.transform.rotate(flappy.image,-90)
+
+        
+    if game_over==False:
+        x-=1
+        if x<-200:
+            x=0
+    
 
     for i in pygame.event.get():
         if i.type==pygame.QUIT:
